@@ -27,6 +27,7 @@ export default class EditView extends React.Component {
   }
 
   render() {
+
     return (
       <div 
         id="edit-view"

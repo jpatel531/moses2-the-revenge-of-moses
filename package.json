@@ -6,6 +6,10 @@
   "scripts": {
     "start": "electron main.js"
   },
+  "engines": {
+    "atom-shell": "0.36.2",
+    "electron": "0.36.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atom/electron-quick-start.git"
@@ -38,8 +42,9 @@
     "babel-preset-react": "^6.3.13",
     "history": "^1.17.0",
     "marked": "^0.3.5",
-    "pusher-websocket-iso": "^0.2.0",
+    "nodegit": "^0.6.3",
     "react": "^0.14.3",
+    "react-dom": "^0.14.3",
     "react-router": "^1.0.3",
     "webpack": "^1.12.9"
   }

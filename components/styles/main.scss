@@ -1,9 +1,16 @@
 @import url(https://fonts.googleapis.com/css?family=Merriweather:400,700italic,700,400italic,300italic,300);
 
-#edit-view {
+@import "./animate";
+
+body {
+  margin: 0;
   font-family: 'Merriweather';
   font-weight: 300;
   font-size: 14;
+}
+
+#edit-view {
+  padding: 50px 30px;
 
   &:focus {
     outline: none;
@@ -13,15 +20,45 @@
     width: 100%;
     height: 100vh;
 
+    #preview-mode {
+      height: 100%;
+      width: inherit;
+
+      p {margin: unset}
+    }
     textarea {
       font-family: inherit;
       font-weight: inherit;
       font-size: inherit;
-      width: 100%;
+      width: inherit;
       height: 100%;
       resize: none;
       border: none;
       outline: none;
     }
   } 
+}
+
+.text-input {
+  outline: none;
+  min-height: 40px;
+  width: 100%;
+  border: none;
+  font: inherit;
+}
+
+.hide {
+  display: none;
+}
+
+#timeline {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 150px;
+  border-top: 1px solid #dae2e3;
+
+  .timeline-action {
+    padding: 25px;
+  }
 }

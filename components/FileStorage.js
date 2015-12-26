@@ -4,13 +4,16 @@ var dialog = remote.require('dialog');
 var fs = require('fs');
 var { EventEmitter } = require('events');
 import WorkspaceFile from "./File";
+import WorkingDirectory from "./WorkingDirectory";
 
 var FileStorage = {
 
   emitter: new EventEmitter(),
 
   open(fn) {
-    dialog.showOpenDialog((fileNames) => {
+    dialog.showOpenDialog({
+      defaultPath: WorkingDirectory.current.path
+    },(fileNames) => {
       if (fileNames === undefined) return;
       var name = fileNames[0];
 
@@ -28,7 +31,9 @@ var FileStorage = {
       return;
     }
 
-    dialog.showSaveDialog((name) => {
+    dialog.showSaveDialog({
+      defaultPath: WorkingDirectory.current.path
+    },(name) => {
       if (name === undefined) return;
       this._writeFile(name, contents, fn)
     });
@@ -37,7 +42,7 @@ var FileStorage = {
   _writeFile(name, contents, fn){
     fs.writeFile(name, contents, (err) => {
       if (err) throw err;
-      if (fn) fn();
+      if (fn) fn(name);
     });
   }
 };

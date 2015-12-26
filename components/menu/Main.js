@@ -2,6 +2,7 @@ const { remote } = require('electron');
 const { Menu, app } = remote;
 import FileStorage from "../FileStorage";
 var { EventEmitter } = require('events');
+import {newWindow} from "../Factory";
 
 export var menuEmitter = new EventEmitter();
 
@@ -54,6 +55,11 @@ var template = [
     label: 'File',
     submenu: [
       {
+        label: 'New',
+        accelerator: 'CmdOrCtrl+N',
+        click: function(){ newWindow().show() }
+      },
+      {
         label: 'Open',
         accelerator: 'CmdOrCtrl+O',
         click: function(){ menuEmitter.emit('open') }
@@ -62,6 +68,11 @@ var template = [
         label: 'Save',
         accelerator: 'CmdOrCtrl+S',
         click: function(){ menuEmitter.emit('save') }
+      },
+      {
+        label: 'Guard',
+        accelerator: 'CmdOrCtrl+G',
+        click: function(){ menuEmitter.emit('guard') }
       }
     ]
   },
@@ -140,6 +151,13 @@ var template = [
             focusedWindow.toggleDevTools();
         }
       },
+      {
+        label: 'Toggle Timeline',
+        accelerator: 'Shift+Command+T',
+        click: function(){
+          menuEmitter.emit('toggle-timeline');
+        }
+      }
     ]
   },
   {

@@ -8,7 +8,8 @@ module.exports = {
   },
   externals: {
     electron: 'commonjs electron',
-    fs: 'commonjs fs'
+    fs: 'commonjs fs',
+    nodegit: 'commonjs nodegit'
   },
   module: {
     loaders: [

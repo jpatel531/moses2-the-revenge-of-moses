@@ -51,9 +51,9 @@ export default class Editor extends React.Component {
     var mainView;
 
     if (this.props.renderedMode) {
-      var __html = this.marked(this.state.text);
+      var __html = this.marked(this.props.file.contents);
       mainView = (
-        <div dangerouslySetInnerHTML={{__html}}>
+        <div id="preview-mode" dangerouslySetInnerHTML={{__html}}>
         </div>
       );
     } else {
