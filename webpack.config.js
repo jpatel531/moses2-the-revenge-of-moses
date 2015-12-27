@@ -9,7 +9,8 @@ module.exports = {
   externals: {
     electron: 'commonjs electron',
     fs: 'commonjs fs',
-    nodegit: 'commonjs nodegit'
+    nodegit: 'commonjs nodegit',
+    child_process: 'commonjs child_process'
   },
   module: {
     loaders: [
