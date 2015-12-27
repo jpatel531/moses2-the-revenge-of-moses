@@ -16,15 +16,17 @@ export default class Timeline extends React.Component {
     } else {
       if (this.props.activate) {
         className += " slideOutDown"
+      } else {
+        className += " hide"
       }
     }
     this.setState({className});
   }
 
   _onGuardKeyDown(evt){
-    if (evt.which !== 13) return;
     var {value} = this.guardInput;
-    this.props.cwd.guard(value);
+    console.log('value', value);
+    this.props._onGuardKeyDown(evt, value);
   }
 
   render(){
@@ -36,7 +38,7 @@ export default class Timeline extends React.Component {
           <div className="timeline-action">
             <input
               ref={(ref)=> this.guardInput = ref}
-              onKeyDown={({nativeEvent})=> this._onGuardKeyDown(nativeEvent)}
+              onKeyDown={(evt)=>this._onGuardKeyDown(evt)}
               autoFocus={true}
               className="text-input"
               placeholder="Enter Message" />

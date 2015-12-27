@@ -38,10 +38,10 @@ export default class WorkingDirectory {
     localStorage.setItem(WORKING_DIRECTORY_KEY, this.path);
   }
 
-  guard(message){
+  guard(message, fn){
     var path = this.path;
     var commit = function(){
-      GitService.commit(path, message);
+      GitService.commit(path, message, fn);
     }
     if (GitService.isGitRepository(path)){
       console.log('is git repo')

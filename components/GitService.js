@@ -9,12 +9,16 @@ export default {
   },
 
   initializeRepository(path, fn){
-    Repository.init(path, false).then((repo)=> {
-      if (fn) fn(repo);
-    });
+    var command = "git init";
+    ChildProcess.exec(command, {
+      cwd: path
+    }, function(err){
+      if (err) console.log('Error', err);
+      if (fn) fn();
+    })
   },
 
-  commit(path, message){
+  commit(path, message, fn){
 
     var command = `
       git add . 
@@ -23,8 +27,8 @@ export default {
 
     ChildProcess.exec(command, {
       cwd: path
-    }, function(err, stdout, stderr){
-      if (err) console.log('Error', err);
+    }, function(err){
+      if (fn) fn(err);
     })
 
   }

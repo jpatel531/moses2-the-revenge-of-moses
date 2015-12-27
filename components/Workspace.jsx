@@ -78,8 +78,20 @@ export default class Workspace extends React.Component {
     this.setState({file, dirty});
   }
 
+  _onGuardKeyDown(evt, value){
+    if (evt.which !== 13) return;
+    this.state.cwd.guard(value, (err)=>{
+      if (err) {
+        console.log('Error', err);
+      } else {
+        this.setState({activateTimeline: false});
+      }
+    });  
+  }
+
   render(){
     document.title = this.state.file.name || "untitled";
+    
     return (
       <div>
         <EditView 
@@ -88,7 +100,7 @@ export default class Workspace extends React.Component {
 
         <Timeline 
           mode={this.state.timelineMode}
-          cwd={this.state.cwd}
+          _onGuardKeyDown={({nativeEvent}, message)=>{this._onGuardKeyDown(nativeEvent, message)}}
           activate={this.state.activateTimeline} />
       </div>
     );
