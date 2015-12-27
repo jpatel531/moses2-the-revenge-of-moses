@@ -51,6 +51,14 @@ body {
   display: none;
 }
 
+.show {
+  display: block;
+}
+
+.config-modal {
+  top: 20%;
+}
+
 #timeline {
   position: fixed;
   bottom: 0;

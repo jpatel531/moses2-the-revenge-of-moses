@@ -25,7 +25,6 @@ export default class Timeline extends React.Component {
 
   _onGuardKeyDown(evt){
     var {value} = this.guardInput;
-    console.log('value', value);
     this.props._onGuardKeyDown(evt, value);
   }
 

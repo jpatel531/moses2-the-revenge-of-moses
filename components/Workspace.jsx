@@ -8,6 +8,8 @@ const {remote} = require('electron');
 const {BrowserWindow, getCurrentWindow} = remote;
 import WorkingDirectory from "./WorkingDirectory";
 import Timeline from "./Timeline.jsx";
+import ConfigModal from "./ConfigModal.jsx";
+var path = require('path');
 
 export default class Workspace extends React.Component {
 
@@ -17,7 +19,8 @@ export default class Workspace extends React.Component {
       file: new WorkspaceFile(),
       dirty: false,
       cwd: WorkingDirectory.fromStorage(),
-      activateTimeline: false
+      activateTimeline: false,
+      getConfig: false
     };
   }
 
@@ -65,9 +68,10 @@ export default class Workspace extends React.Component {
     });
 
     if (!this.state.cwd) {
-      WorkingDirectory.request((cwd)=>{
-        this.setState({cwd});
-      });
+      this.setState({getConfig:true});
+      // WorkingDirectory.request((cwd)=>{
+      //   this.setState({cwd});
+      // });
     }
   }
 
@@ -89,15 +93,27 @@ export default class Workspace extends React.Component {
     });  
   }
 
+  saveSettings(path, origin){
+    var workingDirectory = new WorkingDirectory({path, origin});
+    workingDirectory.persist();
+    this.setState({
+      cwd: workingDirectory,
+      getConfig: false
+    })
+  }
+
   render(){
-    document.title = this.state.file.name || "untitled";
-    
+    var fileName = this.state.file.name;
+    document.title = fileName ? path.basename(fileName) : "untitled"
+
     return (
       <div>
+        <ConfigModal 
+          show={this.state.getConfig} 
+          saveSettings={(path, origin)=> this.saveSettings(path, origin)}/>
         <EditView 
-        onStage={(contents)=> this.onStage(contents)}
-        file={this.state.file} />
-
+          onStage={(contents)=> this.onStage(contents)}
+          file={this.state.file} />
         <Timeline 
           mode={this.state.timelineMode}
           _onGuardKeyDown={({nativeEvent}, message)=>{this._onGuardKeyDown(nativeEvent, message)}}

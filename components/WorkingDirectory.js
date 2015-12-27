@@ -3,14 +3,14 @@ var dialog = remote.require('dialog');
 var fs = require('fs');
 import GitService from "./GitService";
 
-const WORKING_DIRECTORY_KEY = "moses__working_directory";
+const MOSES_CONFIG_KEY = "moses__config";
 
 export default class WorkingDirectory {
 
   static fromStorage(){
-    var path = localStorage.getItem(WORKING_DIRECTORY_KEY);
-    if (!path) return null;
-    return new WorkingDirectory(path);
+    var config = localStorage.getItem(MOSES_CONFIG_KEY);
+    if (!config) return null;
+    return new WorkingDirectory(JSON.parse(config));
   }
 
   static request(fn){
@@ -23,19 +23,21 @@ export default class WorkingDirectory {
     },(fileNames) => {
       if (fileNames === undefined) return;
       var dir = fileNames[0];
-      var workingDirectory = new WorkingDirectory(dir);
-      workingDirectory.persist();
-      fn(workingDirectory);
+      fn(dir);
     });
   }
 
-  constructor(path){
-    this.path = path;
+  constructor(options){
+    this.path = options.path;
+    this.origin = options.origin;
     this.constructor.current = this;
   }
 
   persist(dir){
-    localStorage.setItem(WORKING_DIRECTORY_KEY, this.path);
+    localStorage.setItem(MOSES_CONFIG_KEY, JSON.stringify({
+      path: this.path, 
+      origin: this.origin
+    }));
   }
 
   guard(message, fn){

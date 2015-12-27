@@ -40,8 +40,11 @@
   },
   "dependencies": {
     "babel-preset-react": "^6.3.13",
+    "hammer": "0.0.5",
     "history": "^1.17.0",
+    "jquery": "^2.1.4",
     "marked": "^0.3.5",
+    "materialize-css": "^0.97.5",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-router": "^1.0.3",
