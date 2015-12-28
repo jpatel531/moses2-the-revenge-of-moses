@@ -1,9 +1,9 @@
 var path = require('path');
 
 module.exports = {
-  entry: './components/Main.jsx',
+  entry: './lib/Main.jsx',
   output: {
-      path: path.join(__dirname, '/lib'),
+      path: path.join(__dirname, '/dist'),
       filename: 'bundle.js'
   },
   externals: {
@@ -24,7 +24,7 @@ module.exports = {
   module: {
     loaders: [
       { 
-        test: path.join(__dirname, '/components'),
+        test: path.join(__dirname, '/lib'),
         loader: 'babel?presets[]=react,presets[]=es2015' 
       },
       {

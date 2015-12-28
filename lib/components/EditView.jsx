@@ -30,6 +30,7 @@ export default class EditView extends React.Component {
 
     return (
       <div 
+        className="full-height"
         id="edit-view"
         tabIndex={-1}
         ref={(ref)=> this.element = ref}

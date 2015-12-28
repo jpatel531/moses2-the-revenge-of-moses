@@ -15,7 +15,7 @@ export default class Editor extends React.Component {
       renderer: new marked.Renderer(),
         gfm: true,
         tables: true,
-        breaks: false,
+        breaks: true,
         pedantic: false,
         sanitize: false,
         smartLists: true,
@@ -52,6 +52,7 @@ export default class Editor extends React.Component {
 
     if (this.props.renderedMode) {
       var __html = this.marked(this.props.file.contents);
+      console.log(__html);
       mainView = (
         <div id="preview-mode" dangerouslySetInnerHTML={{__html}}>
         </div>

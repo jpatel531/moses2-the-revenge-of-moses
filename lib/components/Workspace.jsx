@@ -1,14 +1,15 @@
 import React from 'react';
 import EditView from './EditView.jsx';
-import FileStorage from './FileStorage';
-import WorkspaceFile from './File';
-import {newWindow} from "./Factory";
-import {menuEmitter} from "./menu/main";
+import FileStorage from '../services/FileStorage';
+import WorkspaceFile from '../services/File';
+import {newWindow} from "../services/Factory";
+import {menuEmitter} from "../services/Menu";
 const {remote} = require('electron');
 const {BrowserWindow, getCurrentWindow} = remote;
-import WorkingDirectory from "./WorkingDirectory";
-import Timeline from "./Timeline.jsx";
+import WorkingDirectory from "../services/WorkingDirectory";
+import SideBar from "./SideBar.jsx";
 import ConfigModal from "./ConfigModal.jsx";
+import MetaData from "./MetaData.jsx";
 var path = require('path');
 
 export default class Workspace extends React.Component {
@@ -19,8 +20,10 @@ export default class Workspace extends React.Component {
       file: new WorkspaceFile(),
       dirty: false,
       cwd: WorkingDirectory.fromStorage(),
-      activateTimeline: false,
-      getConfig: false
+      activateSideBar: false,
+      getConfig: false,
+      sideBarMode: null,
+      wordCount: 0
     };
   }
 
@@ -56,11 +59,14 @@ export default class Workspace extends React.Component {
     menuEmitter.on('open', ()=> this.openFile());
     menuEmitter.on('save', ()=> this.saveFile());
     menuEmitter.on('toggle-timeline', ()=>{
-      this.setState({activateTimeline: !this.state.activateTimeline});
+      this.setState({activateSideBar: !this.state.activateSideBar});
     });
+    menuEmitter.on('save-as', ()=>{
+
+    })
     menuEmitter.on('guard', ()=> this.setState({
-      timelineMode: 'guard',
-      activateTimeline: 'true'
+      sideBarMode: 'guard',
+      activateSideBar: 'true'
     }));
 
     getCurrentWindow().on('moses:new-file', (file)=>{
@@ -69,9 +75,6 @@ export default class Workspace extends React.Component {
 
     if (!this.state.cwd) {
       this.setState({getConfig:true});
-      // WorkingDirectory.request((cwd)=>{
-      //   this.setState({cwd});
-      // });
     }
   }
 
@@ -83,12 +86,12 @@ export default class Workspace extends React.Component {
   }
 
   _onGuardKeyDown(evt, value){
-    if (evt.which !== 13) return;
     this.state.cwd.guard(value, (err)=>{
       if (err) {
         console.log('Error', err);
       } else {
-        this.setState({activateTimeline: false});
+        evt.target.value = '';
+        this.setState({activateSideBar: false});
       }
     });  
   }
@@ -102,22 +105,41 @@ export default class Workspace extends React.Component {
     })
   }
 
+  _getWordCount(contents){
+    if (typeof(contents)==="string") {
+      return (contents.trim().
+              replace(/['";:,.?¿\-!¡]+/g, '').
+              match(/\S+/g) || []).
+              length;
+    } else {
+      return 0;
+    }
+  }
+
+  _onNavSelect(sideBarMode){
+    this.setState({sideBarMode})
+  }
+
   render(){
     var fileName = this.state.file.name;
     document.title = fileName ? path.basename(fileName) : "untitled"
 
     return (
-      <div>
+      <div className="full-height">
+        <MetaData 
+          wordCount={this._getWordCount(this.state.file.contents)} />
         <ConfigModal 
           show={this.state.getConfig} 
           saveSettings={(path, origin)=> this.saveSettings(path, origin)}/>
         <EditView 
+          sideBarActivated={this.state.activateSideBar}
           onStage={(contents)=> this.onStage(contents)}
           file={this.state.file} />
-        <Timeline 
-          mode={this.state.timelineMode}
+        <SideBar 
+          mode={this.state.sideBarMode}
+          onSelect={(mode)=> this._onNavSelect(mode)}
           _onGuardKeyDown={({nativeEvent}, message)=>{this._onGuardKeyDown(nativeEvent, message)}}
-          activate={this.state.activateTimeline} />
+          activate={this.state.activateSideBar} />
       </div>
     );
   }

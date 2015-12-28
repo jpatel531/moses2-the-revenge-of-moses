@@ -1,6 +1,8 @@
 import React from 'react';
+import SideBarNav from "./SideBarNav.jsx";
+import GuardView from "./GuardView.jsx";
 
-export default class Timeline extends React.Component {
+export default class SideBar extends React.Component {
 
   constructor(props){
     super(props);
@@ -24,34 +26,23 @@ export default class Timeline extends React.Component {
   }
 
   _onGuardKeyDown(evt){
-    var {value} = this.guardInput;
+    var {which, target: {value}} = evt;
+    if (which !== 13) return;
     this.props._onGuardKeyDown(evt, value);
   }
 
   render(){
-    var action;
-
-    switch(this.props.mode){
-      case "guard":
-        action = (
-          <div className="timeline-action">
-            <input
-              ref={(ref)=> this.guardInput = ref}
-              onKeyDown={(evt)=>this._onGuardKeyDown(evt)}
-              autoFocus={true}
-              className="text-input"
-              placeholder="Enter Message" />
-          </div>
-        );
-        break;
-      default:
-        break;
-    }
     return (
-      <div 
+      <div
         className={this.state.className}
         id="timeline">
-          {action}
+          <SideBarNav 
+            onSelect={this.props.onSelect}
+            mode={this.props.mode} />
+          <GuardView
+            activate={this.props.mode === "guard"}
+            onGuardKeyDown={(evt)=>this._onGuardKeyDown(evt)}
+            />
       </div>
     );
   }

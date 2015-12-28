@@ -3,9 +3,9 @@ import { render } from 'react-dom';
 import { Router, Route } from 'react-router';
 
 import './styles/main.scss'; 
-import './menu/Main';
+import './services/Menu';
 
-import Workspace from './Workspace.jsx';
+import Workspace from './components/Workspace.jsx';
 
 render((
   <Router>

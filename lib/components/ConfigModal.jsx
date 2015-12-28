@@ -1,5 +1,5 @@
 import React from "react";
-import WorkingDirectory from "./WorkingDirectory";
+import WorkingDirectory from "../services/WorkingDirectory";
 
 export default class ConfigModal extends React.Component {
 
